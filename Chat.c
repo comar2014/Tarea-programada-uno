@@ -1,4 +1,4 @@
-         #include <sys/socket.h>
+#include <sys/socket.h>
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <netdb.h>
@@ -539,14 +539,31 @@ int leer_archivo_puerto(int puerto){
 }
 
 //++++++++++++++++++++++++++++++++++++++++++ Main+++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
 int main(){
-    
-    int PuertoServer,PuertoCliente=0,opcion; // Variable para almacenar el pueto de cliente y el del servidor
+	
+	int opc; 
+	int PuertoServer,PuertoCliente=0,opcion; // Variable para almacenar el pueto de cliente y el del servidor
     char *PuertoS;
     char *IpCliente;
     char contacto[20];
+    
     printf("*****Bienvenido al sistema de Chat*****\n");
     printf("\n");
+	printf("¿Qué desea realizar:\n");
+	printf("\n");
+	printf("1.Entrar\n");
+	printf("\n");
+	printf("2.Salir\n");
+	printf("\n");
+	scanf("%d", &opc);
+	switch(opc){
+		
+		case 1:
+		
 	printf("¿Qué desea realizar:\n");
 	printf("\n");
 	printf("1.Agregar un amigo\n");
@@ -561,59 +578,85 @@ int main(){
 	printf("\n");
 	scanf("%d", &opcion);
     
-    switch(opcion){
+    switch(opcion)
+    {
 		
-		case 1:
-		
-			escribir_archivo();
-			break;
+			case 1:
 			
-		case 2:
-			
-			leer_archivo();
-			break;
-		
-		case 3:
-		
-			printf("Por favor ingrese el contacto que desea buscar");
-			printf("\n");
-			printf("\n");
-			scanf("%s", contacto);
-			leer_archivo2();
-			printf("\n");
-			busqueda(contacto);
-			break;
-			
-		case 4:
-		
-			printf("Digite el nombre del contacto al que desea enviar un mensaje:\n");
-			printf("\n");
-			scanf("%s", contacto);
-			leer_archivo2();
-			PuertoS=busqueda_puerto(contacto);
-			PuertoServer=atoi(PuertoS);
-			IpCliente=busqueda_ip(contacto);
-			PuertoCliente=leer_archivo_puerto(PuertoServer); 
-			
-			if (PuertoCliente!=0){
-				 
-				int idProceso;
-				idProceso=fork(); // Se lleva acabo la duplicación de procesos mediante el fock
-			
-				if(idProceso==0 )					 
-					Cliente(PuertoCliente,IpCliente); // LLamada a la función cliente con los parametros de Puerto y IP
-				 
-				else 
-					Server(PuertoServer); // Llamada a la función servidor con los parametros Puerto y Nombre
+				escribir_archivo();
+				main(); 
+				break;
 				
-			}
+			case 2:
+				
+				leer_archivo();
+					main(); 
+				break;
 			
-			else{
-				printf("El puerto no se encuentra en el archivo de configuración");
+			case 3:
+			
+				printf("Por favor ingrese el contacto que desea buscar");
+				printf("\n");
+				printf("\n");
+				scanf("%s", contacto);
+				leer_archivo2();
+				printf("\n");
+				busqueda(contacto);
+					main(); 
+				break;
+				
+			case 4:
+			
+				printf("Digite el nombre del contacto al que desea enviar un mensaje:\n");
+				printf("\n");
+				scanf("%s", contacto);
+				leer_archivo2();
+				PuertoS=busqueda_puerto(contacto);
+				PuertoServer=atoi(PuertoS);
+				IpCliente=busqueda_ip(contacto);
+				PuertoCliente=leer_archivo_puerto(PuertoServer); 
+				
+				if (PuertoCliente!=0){
+					 
+					int idProceso;
+					idProceso=fork(); // Se lleva acabo la duplicación de procesos mediante el fock
+				
+					if(idProceso==0 )					 
+						Cliente(PuertoCliente,IpCliente); // LLamada a la función cliente con los parametros de Puerto y IP
+					 
+					else 
+						Server(PuertoServer); // Llamada a la función servidor con los parametros Puerto y Nombre
+					
+					
 				}
 				
+				
+				else{
+					printf("El puerto no se encuentra en el archivo de configuración");
+					}
+					
+				main(); 	
+			default:
+				printf("Ha ingresado un opción no valido\n");
+				break;
+}	
+	
+	case 2:
+		printf("Ha salido del sistema de chat"); 
+		exit(1); 
+		break; 
+		
+		default:
+			printf("Ha ingresado una opción no valido\n");
+			break;				
    
            
     }
-    return 0; 
-}
+			
+	 return 0; 	
+}	
+   
+// FIn del menu
+
+
+
